@@ -1,13 +1,12 @@
 import React from 'react'
 import {QuizData} from './QuizData'
 import Container from '@material-ui/core/Container';
-import { Paper, Typography, Card } from '@material-ui/core';
+import { Paper, Typography, Card, TextField } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid'
 import CardMedia from '@material-ui/core/CardMedia'
 import { useTheme, withTheme } from '@material-ui/core/styles';
-import {makeStyles} from '@material-ui/styles/makeStyles'
-import image1 from './1.png'
+import {makeStyles} from '@material-ui/styles/makeStyles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
@@ -17,10 +16,10 @@ import Button from '@material-ui/core/Button';
 const useStyles = theme => ({
     root: {
         display: 'flex',
-      },
-      formControl: {
+    },
+    formControl: {
         margin: theme.spacing(0),
-      },
+    },
 });
 
 class Quiz extends React.Component {
@@ -36,19 +35,39 @@ class Quiz extends React.Component {
             return {
                 questions: QuizData[currentQuestion].question,
                 options: QuizData[currentQuestion].options,
-                answers: QuizData[currentQuestion].answer
+                answers: QuizData[currentQuestion].answer,
+                image: QuizData[currentQuestion].image
             }
         })
    }
     componentDidMount() {
         this.loadQuiz();
     }
+    nextQuestionHandler = () => {
+        this.setState({
+            currentQuestion: this.state.currentQuestion + 1
+        })
+        console.log(this.state.currentQuestion)
+    }
+    componentDidUpdate( prevProps, prevState) {
+        const {currentQuestion} = this.state;
+        if(this.state.currentQuestion !== prevState.currentQuestion) {
+            this.setState(() => {
+                return {
+                    questions: QuizData[currentQuestion].question,
+                    options: QuizData[currentQuestion].options,
+                    answers: QuizData[currentQuestion].answer,
+                    image: QuizData[currentQuestion].image
+                }
+            })
+        }
+    }
     
     
     render() {
-        const {questions, options} = this.state;
+        const {questions, options, image, currentQuestion} = this.state;
         const { classes } = this.props;
-
+        ;
         return (
             
             <Container item xs={10}>
@@ -56,7 +75,7 @@ class Quiz extends React.Component {
                 style= {{ padding: 10,
                 marginTop: 20}}>
   <Grid container justify="space-between">  
-  <Typography inline variant="body1" align="left">Pyetja 1 / 30</Typography>
+  <Typography inline variant="body1" align="left">{`Pyetja ${currentQuestion + 1} / ${QuizData.length}`}</Typography>
   <Typography inline variant="body1" align="right">3 Pike</Typography>
 </Grid>
                 
@@ -70,12 +89,19 @@ class Quiz extends React.Component {
                 </Paper>
                 <Paper style={{paddingTop:20, paddingBottom: 40}}>
                 <Grid container>
+                <div>
+                { image ? ( 
                 <Grid item sm={4}>
-                
-                   
-                <img src={image1} />
+                <img src={image} />
                 </Grid>
-                <Grid item sm={8} style={{paddingLeft:'10px'}}>
+                ) : (
+                    <Grid item sm={4}>
+                   
+                    </Grid>
+                )
+                }
+                </div>
+                <Grid item sm={8} style={{paddingLeft:'30px'}}>
                 {options.map(option => (
                      <div className={classes.root}>
                      <FormControl component="fieldset" className={classes.formControl}>
@@ -106,6 +132,7 @@ class Quiz extends React.Component {
                 color="primary">Previous
                 </Button>
                 <Button 
+                onClick={this.nextQuestionHandler}
                 style={{marginLeft: '15px'}}
                 variant="contained" 
                 color="primary">Next
