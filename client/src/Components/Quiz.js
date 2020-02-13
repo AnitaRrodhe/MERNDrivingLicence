@@ -5,20 +5,23 @@ import { Paper, Typography, Card } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid'
 import CardMedia from '@material-ui/core/CardMedia'
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useTheme, withTheme } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/styles/makeStyles'
+import image1 from './1.png'
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import Button from '@material-ui/core/Button';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = theme => ({
     root: {
         display: 'flex',
       },
-      details: {
-        display: 'flex',
-        flexDirection: 'column',
+      formControl: {
+        margin: theme.spacing(0),
       },
-    cover: {
-      width: '100px',
-    }
-}))
+});
 
 class Quiz extends React.Component {
     state = {
@@ -44,10 +47,11 @@ class Quiz extends React.Component {
     
     render() {
         const {questions, options} = this.state;
-        
+        const { classes } = this.props;
+
         return (
             
-            <Container>
+            <Container item xs={10}>
                 <Paper 
                 style= {{ padding: 10,
                 marginTop: 20}}>
@@ -55,27 +59,58 @@ class Quiz extends React.Component {
   <Typography inline variant="body1" align="left">Pyetja 1 / 30</Typography>
   <Typography inline variant="body1" align="right">3 Pike</Typography>
 </Grid>
+                
                 </Paper>
+                
                 <Paper 
                 style= {{ padding: 10,
                 marginTop: 10,
                 backgroundColor: '#EEEEEE'}}>
                 {questions}
                 </Paper>
-                <Paper>
-                    <Card style={{width: 400, margin: 10}}>
-                <CardMedia 
-     image= {require ("./1.png")}/>
-     </Card>
+                <Paper style={{paddingTop:20, paddingBottom: 40}}>
+                <Grid container>
+                <Grid item sm={4}>
+                
+                   
+                <img src={image1} />
+                </Grid>
+                <Grid item sm={8} style={{paddingLeft:'10px'}}>
                 {options.map(option => (
-                    <p 
-                    key={option.id}
-                    >
-                       {option} 
-                    </p>
+                     <div className={classes.root}>
+                     <FormControl component="fieldset" className={classes.formControl}>
+                     <FormGroup>
+                       <FormControlLabel
+        control={
+          <Checkbox
+            
+            value="checkedB"
+            color="primary"
+          />
+        }
+        key={option.id}
+        label={option}
+      />
+         </FormGroup>
+            </FormControl>
+    </div>       
                 ))}
-
+</Grid>
+             
+                </Grid>
                 </Paper>
+                <Grid container item xs={12} justify="flex-end"
+                style={{marginTop:'15px'}}>
+                <Button 
+                variant="contained" 
+                color="primary">Previous
+                </Button>
+                <Button 
+                style={{marginLeft: '15px'}}
+                variant="contained" 
+                color="primary">Next
+                </Button>
+</Grid>
 
 </Container>
         )
@@ -83,4 +118,4 @@ class Quiz extends React.Component {
     }
 
 }
-export default Quiz;
+export default withStyles(useStyles)(Quiz)
