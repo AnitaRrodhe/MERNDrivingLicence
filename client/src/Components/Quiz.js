@@ -12,7 +12,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import Button from '@material-ui/core/Button';
-
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 const useStyles = theme => ({
     root: {
         display: 'flex',
@@ -20,13 +21,16 @@ const useStyles = theme => ({
     formControl: {
         margin: theme.spacing(0),
     },
+    
 });
 
 class Quiz extends React.Component {
     state = {
         userAnswer: null,
         currentQuestion: 0,
-        options: []
+        options: [],
+        quizEnd: false,
+        score: 0,
 }
 
     loadQuiz = () => {
@@ -44,9 +48,23 @@ class Quiz extends React.Component {
         this.loadQuiz();
     }
     nextQuestionHandler = () => {
+        const {userAnswer, answer, score} = this.state;
         this.setState({
             currentQuestion: this.state.currentQuestion + 1
         })
+        console.log(this.state.currentQuestion)
+        if(userAnswer === answer) {
+            this.setState({
+                score: score + 1
+            })
+        }
+    }
+    prevQuestionHandler = () => {
+        if(this.state.currentQuestion >= 1) { 
+        this.setState({
+            currentQuestion: this.state.currentQuestion - 1
+        })
+    } 
         console.log(this.state.currentQuestion)
     }
     componentDidUpdate( prevProps, prevState) {
@@ -62,12 +80,32 @@ class Quiz extends React.Component {
             })
         }
     }
-    
-    
+    finishHandler = () => {
+        if (this.state.currentQuestion === QuizData.length -1 ) {
+            this.setState({
+                quizEnd: true
+            })
+        }
+    }
+     checkAnswer = answer => {
+         this.setState({
+             userAnswer: answer
+         })
+     }
     render() {
-        const {questions, options, image, currentQuestion} = this.state;
+        const {questions, options, image, currentQuestion, quizEnd, score} = this.state;
         const { classes } = this.props;
-        ;
+        
+        if(quizEnd) {
+            return (
+                <div>
+                    <h2 style={{textAlign:'center'}}>Test finished {score}</h2>
+                </div>
+            )
+        }
+        const handleChange = event => {
+            console.log(event.target.value);
+          };
         return (
             
             <Container item xs={10}>
@@ -76,7 +114,7 @@ class Quiz extends React.Component {
                 marginTop: 20}}>
   <Grid container justify="space-between">  
   <Typography inline variant="body1" align="left">{`Pyetja ${currentQuestion + 1} / ${QuizData.length}`}</Typography>
-  <Typography inline variant="body1" align="right">3 Pike</Typography>
+  <Typography inline variant="body1" align="right">1 Pike</Typography>
 </Grid>
                 
                 </Paper>
@@ -105,19 +143,15 @@ class Quiz extends React.Component {
                 {options.map(option => (
                      <div className={classes.root}>
                      <FormControl component="fieldset" className={classes.formControl}>
-                     <FormGroup>
-                       <FormControlLabel
-        control={
-          <Checkbox
-            
-            value="checkedB"
-            color="primary"
-          />
-        }
+                     <RadioGroup aria-label="gender" name="gender1">
+                     <FormControlLabel value={option} control={<Radio />} label="Female" onClick={() => this.checkAnswer(option)}
+                     onChange={handleChange}
         key={option.id}
         label={option}
+        
       />
-         </FormGroup>
+        </RadioGroup>
+
             </FormControl>
     </div>       
                 ))}
@@ -128,15 +162,27 @@ class Quiz extends React.Component {
                 <Grid container item xs={12} justify="flex-end"
                 style={{marginTop:'15px'}}>
                 <Button 
+                onClick={this.prevQuestionHandler}
                 variant="contained" 
                 color="primary">Previous
                 </Button>
+                {currentQuestion < QuizData.length - 1 && 
                 <Button 
                 onClick={this.nextQuestionHandler}
                 style={{marginLeft: '15px'}}
                 variant="contained" 
                 color="primary">Next
                 </Button>
+                } 
+                {currentQuestion === QuizData.length - 1 &&
+                <Button 
+                onClick={this.finishHandler}
+                style={{marginLeft: '15px'}}
+                variant="contained" 
+                color="primary">Finish
+                </Button>
+                }
+
 </Grid>
 
 </Container>
