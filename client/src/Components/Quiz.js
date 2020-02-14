@@ -48,12 +48,16 @@ class Quiz extends React.Component {
         this.loadQuiz();
     }
     nextQuestionHandler = () => {
-        const {userAnswer, answer, score} = this.state;
+        const {userAnswer, answers, score} = this.state;
         this.setState({
             currentQuestion: this.state.currentQuestion + 1
+            
         })
-        console.log(this.state.currentQuestion)
-        if(userAnswer === answer) {
+        console.log(userAnswer)
+        console.log(`answer is ${answers}`)
+        console.log(`score is ${score}`)
+
+        if(userAnswer === answers) {
             this.setState({
                 score: score + 1
             })
@@ -93,7 +97,7 @@ class Quiz extends React.Component {
          })
      }
     render() {
-        const {questions, options, image, currentQuestion, quizEnd, score} = this.state;
+        const {questions, options, image, currentQuestion, quizEnd, score, userAnswer} = this.state;
         const { classes } = this.props;
         
         if(quizEnd) {
@@ -104,8 +108,13 @@ class Quiz extends React.Component {
             )
         }
         const handleChange = event => {
-            console.log(event.target.value);
+            this.setState({
+                userAnswer: event.target.value
+            })
+            
           };
+
+
         return (
             
             <Container item xs={10}>
@@ -144,12 +153,15 @@ class Quiz extends React.Component {
                      <div className={classes.root}>
                      <FormControl component="fieldset" className={classes.formControl}>
                      <RadioGroup aria-label="gender" name="gender1">
-                     <FormControlLabel value={option} control={<Radio />} label="Female" onClick={() => this.checkAnswer(option)}
+                     <FormControlLabel value={option} 
+                     control={<Radio />} 
+                     label="Female" 
+                     onClick={() => this.checkAnswer(option)}
                      onChange={handleChange}
-        key={option.id}
-        label={option}
-        
-      />
+                     checked={userAnswer === option}
+                    key={option.id}
+                    label={option}
+                    />
         </RadioGroup>
 
             </FormControl>
