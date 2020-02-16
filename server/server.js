@@ -1,23 +1,32 @@
+const Hurma = require('./test.model');
+
 const express=require('express');
 const app=express();
 const bodyParser = require('body-parser')
-const MongoClient = require('mongodb').MongoClient
+const mongoose = require("mongoose");
+const link = "mongodb://127.0.0.1:27042/driver-license-db";
 
-MongoClient.connect('mongodb://localhost:27042/driver-license-db',function (err, client){
-	if (err) throw err
+mongoose.connect(link);
 
-	var db = client.db('driver-license-db') 
+var connection = mongoose.connection;
 
-	db.collection('test').find().toArray(function (err, result){
-		if (err) throw err
-		
-		console.log(result)
-	})
+connection.on('error', console.error.bind(console, 'connection error:'));
+connection.once('open', function () {
+
+connection.db.collection("test", function(err, collection){
+        collection.find({}).toArray(function(err, data){
+            console.log(data);
 })
+    });
 
+});
 
 app.get('/', function (req, res) {
-	res.send('test');
+
+	Hurma.find({}, function(err,docs) {
+		console.log(docs);
+		res.send(docs);
+	});	
 })
 
 
