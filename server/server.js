@@ -1,4 +1,6 @@
-const Hurma = require('./test.model');
+const testCollection = require('./test.model');
+const quizCollection = require('./quiz.model');
+
 
 const express=require('express');
 const app=express();
@@ -23,11 +25,22 @@ connection.db.collection("test", function(err, collection){
 
 app.get('/', function (req, res) {
 
-	Hurma.find({}, function(err,docs) {
+	testCollection.find({}, function(err,docs) {
 		console.log(docs);
 		res.send(docs);
 	});	
 })
+
+app.post('/quiz',function (req,res)
+{
+   quizCollection.save({}, function(err,docs){
+    console.log(req);
+
+	});
+})
+ 
+
+
 
 
 app.listen(8081,()=>
