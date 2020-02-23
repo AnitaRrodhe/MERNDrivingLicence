@@ -123,8 +123,8 @@ class Quiz extends React.Component {
         if(quizEnd) {
             return (
                 <div>
-                    <h2 style={{textAlign:'center'}}>Test finished</h2>
-                    <h2 style={{textAlign:'center'}}>Your score are: {score}</h2>
+                    <h2 style={{textAlign:'center'}}>Test finished!</h2>
+                    <h2 style={{textAlign:'center'}}>Your scored {score} points, out of 40 points</h2>
                 </div>
             )
         }
@@ -155,7 +155,7 @@ class Quiz extends React.Component {
                 backgroundColor: '#EEEEEE'}}>
                 {questions}
                 </Paper>
-                <Paper style={{paddingTop:20, paddingBottom: 40}}>
+                <Paper style={{paddingTop:20, paddingBottom: 40, height: "200px"}}>
                 <Grid container>
                 <div>
                 { image ? ( 
