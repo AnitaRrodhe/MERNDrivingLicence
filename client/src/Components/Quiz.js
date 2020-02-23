@@ -14,6 +14,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
+
 const useStyles = theme => ({
     root: {
         display: 'flex',
@@ -27,6 +28,7 @@ const useStyles = theme => ({
 class Quiz extends React.Component {
     state = {
         userAnswer: null,
+        userAnswers: {},
         currentQuestion: 0,
         options: [],
         quizEnd: false,
@@ -47,32 +49,47 @@ class Quiz extends React.Component {
     componentDidMount() {
         this.loadQuiz();
     }
+
+    calculateScore() {
+        var score = 0;
+        Object.entries(this.state.userAnswers).map(([key, value]) => {
+            if (QuizData[key].answer == value) {
+                score++;
+            }
+        })
+        this.setState({
+            score: score
+        });
+    }
+
     nextQuestionHandler = () => {
         const {userAnswer, answers, score} = this.state;
         this.setState({
+            userAnswer: this.state.userAnswers[this.state.currentQuestion + 1],
             currentQuestion: this.state.currentQuestion + 1
             
         })
         console.log(userAnswer)
         console.log(`answer is ${answers}`)
         console.log(`score is ${score}`)
-
-        if(userAnswer === answers) {
-            this.setState({
-                score: score + 1
-            })
-        }
+    
+        this.calculateScore();
     }
+
     prevQuestionHandler = () => {
         if(this.state.currentQuestion >= 1) { 
         this.setState({
+            userAnswer: this.state.userAnswers[this.state.currentQuestion - 1],
             currentQuestion: this.state.currentQuestion - 1
         })
     } 
         console.log(this.state.currentQuestion)
+        this.calculateScore();
+
     }
     componentDidUpdate( prevProps, prevState) {
         const {currentQuestion} = this.state;
+
         if(this.state.currentQuestion !== prevState.currentQuestion) {
             this.setState(() => {
                 return {
@@ -93,8 +110,11 @@ class Quiz extends React.Component {
     }
      checkAnswer = answer => {
          this.setState({
-             userAnswer: answer
+             userAnswer: answer,
+             userAnswers: {...this.state.userAnswers, [this.state.currentQuestion]: answer}
          })
+        this.calculateScore();
+         
      }
     render() {
         const {questions, options, image, currentQuestion, quizEnd, score, userAnswer} = this.state;
@@ -103,7 +123,8 @@ class Quiz extends React.Component {
         if(quizEnd) {
             return (
                 <div>
-                    <h2 style={{textAlign:'center'}}>Test finished {score}</h2>
+                    <h2 style={{textAlign:'center'}}>Test finished</h2>
+                    <h2 style={{textAlign:'center'}}>Your score are: {score}</h2>
                 </div>
             )
         }
@@ -111,7 +132,7 @@ class Quiz extends React.Component {
             this.setState({
                 userAnswer: event.target.value
             })
-            
+            this.calculateScore();
           };
 
 
