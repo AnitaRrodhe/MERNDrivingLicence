@@ -124,7 +124,7 @@ class Quiz extends React.Component {
             return (
                 <div>
                     <h2 style={{textAlign:'center'}}>Test finished!</h2>
-                    <h2 style={{textAlign:'center'}}>Your scored {score} points, out of 40 points</h2>
+                    <h2 style={{textAlign:'center'}}>You scored {score} points, out of 40 points</h2>
                 </div>
             )
         }
