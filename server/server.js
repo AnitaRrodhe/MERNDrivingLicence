@@ -19,12 +19,23 @@ connection.db.collection("test", function(err, collection){
         collection.find({}).toArray(function(err, data){
             console.log(data);
 })
-    });
+    })
 
 });
 
+/**
+ * Entrypoint to provide the tests data to the client app.
+ * No return since it answers the http request.
+ * See {@link test.model.js}
+ * @module TestResource
+ * @function
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
 app.get('/', function (req, res) {
 
+	//testCollection from the mongoose test.model will provide the data 
+	//the find method with empty parameter will take everything
 	testCollection.find({}, function(err,docs) {
 		console.log(docs);
 		res.send(docs);
@@ -38,9 +49,6 @@ app.post('/quiz',function (req,res)
 
 	});
 })
- 
-
-
 
 
 app.listen(8081,()=>
