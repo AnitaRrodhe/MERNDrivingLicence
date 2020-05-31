@@ -1,11 +1,11 @@
-/// Project Title
+/// Project Title:
 Driving Licence Quiz
 
 
-/// Getting Started
+/// Getting Started:
 This project consists on building a website that let's the users get prepared for their driving licence test, through alternative questions.
 
-/// Installing
+/// Installing:
 npx create-react-app client
 sudo apt-get install nodejs -y
 npm install
@@ -13,11 +13,11 @@ npm install express
 npm install mongoose
 npm install body-parser
 
-/// Run
+/// Run:
 npm run start
 
 
-/// docs
+/// docs:
 Header.js
 Quiz.js
 QuizData.js
