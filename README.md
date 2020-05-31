@@ -1,6 +1,7 @@
 /// Project Title
 Driving Licence Quiz
 
+
 /// Getting Started
 This project consists on building a website that let's the users get prepared for their driving licence test, through alternative questions.
 
@@ -26,13 +27,5 @@ server.js
 test.model.js
 
 
-/// Authors 
-Anita Rrodhe 
-Fisnik Avdiu
-Hurma Hasanaj 
-Saranda Zekolli
-
-/// Licence
-This project is licensed under the Epitech Balkans Licence
-
-/// Acknowledgments
+/// Author 
+Anita Rrodhe # MERNDrivingLicence
