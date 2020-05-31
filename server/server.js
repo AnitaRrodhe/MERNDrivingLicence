@@ -8,7 +8,7 @@ const bodyParser = require('body-parser')
 const mongoose = require("mongoose");
 const link = "mongodb://127.0.0.1:27042/driver-license-db";
 
-mongoose.connect(link);
+mongoose.connect(link, { useNewUrlParser: true, useUnifiedTopology: true });
 
 var connection = mongoose.connection;
 
